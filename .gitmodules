@@ -1,9 +1,9 @@
 [submodule "glfw"]
-	path = glfw
+	path = deps/glfw
 	url = https://github.com/glfw/glfw
 [submodule "imgui"]
-	path = imgui
+	path = deps/imgui
 	url = https://github.com/ocornut/imgui
 [submodule "imgui-texteditor"]
-	path = imgui-texteditor
+	path = deps/imgui-texteditor
 	url = https://github.com/BalazsJako/ImGuiColorTextEdit
