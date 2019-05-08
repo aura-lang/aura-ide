@@ -3,15 +3,17 @@ cmake_minimum_required(VERSION 3.8)
 project("aura-ide")
 
 # Add GLFW for window handling
-set(GLFW_BUILD_EXAMPLES OFF)
-set(GLFW_BUILD_TESTS OFF)
-set(GLFW_BUILD_DOCS OFF)
+option(GLFW_BUILD_EXAMPLES "" OFF)
+option(GLFW_BUILD_TESTS "" OFF)
+option(GLFW_BUILD_DOCS "" OFF)
 add_subdirectory("glfw")
 
 # Create the opengl context.
 file(GLOB_RECURSE GLAD_FILES glad/src/*.c glad/)
 add_library(glad STATIC ${GLAD_FILES})
-target_include_directories(glad glad/include/)
+target_include_directories(glad PUBLIC
+ glad/include/
+)
 
 # Compile imgui for the GUI interface
 set(IMGUI_FILES 
@@ -25,17 +27,19 @@ set(IMGUI_FILES
 )
 
 add_library(imgui STATIC ${IMGUI_FILES})
-target_include_directories(imgui 
+target_include_directories(imgui PUBLIC
     imgui/
     imgui/examples/
     imgui/misc/cpp/
 )
 
-target_link_libraries(imgui glad)
-target_compile_definitions(imgui IMGUI_IMPL_OPENGL_LOADER_GLAD)
+target_link_libraries(imgui glad glfw)
+target_compile_definitions(imgui PUBLIC
+    IMGUI_IMPL_OPENGL_LOADER_GLAD
+)
 
 
 # Compile the IDE.
-file(GLOB_RECURSE AURA_IDE_FILES ide/*.cpp ide/*.hpp ide/*.h ide/*.c)
+file(GLOB_RECURSE AURA_IDE_FILES src/*.cpp src/*.hpp src/*.h src/*.c)
 add_executable(aura-ide ${AURA_IDE_FILES})
 target_link_libraries(aura-ide imgui glad)
